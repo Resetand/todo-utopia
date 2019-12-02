@@ -5,8 +5,16 @@ import { RecordRequired, TableProps, Column } from './types';
 
 const b = block('Table');
 
-const Table = <Record extends RecordRequired>({ records, columns }: TableProps<Record>) => {
-    const getColumnsCustomStyle = ({ width, align }: Column<Record>) => {
+const Table = <Record extends RecordRequired>({
+    records,
+    columns,
+    width: tableWidth,
+    bordered = false,
+    onRowClick = () => {},
+    hoverEffect,
+    headerStyle,
+}: TableProps<Record>) => {
+    const createColumnsCustomStyles = ({ width, align }: Column<Record>) => {
         const style: React.CSSProperties = {
             width,
             textAlign: align || 'left',
@@ -16,7 +24,7 @@ const Table = <Record extends RecordRequired>({ records, columns }: TableProps<R
 
     const renderHead = () => {
         return columns.map(column => (
-            <th style={getColumnsCustomStyle(column)} className={b('item', { title: true })}>
+            <th style={createColumnsCustomStyles(column)} className={b('item', { title: true })}>
                 {column.title}
             </th>
         ));
@@ -24,11 +32,11 @@ const Table = <Record extends RecordRequired>({ records, columns }: TableProps<R
 
     const renderBody = () =>
         records.map(record => (
-            <tr key={record.key} className={b('row')}>
+            <tr onClick={() => onRowClick(record.key)} key={record.key}>
                 {columns.map(column => {
                     const { render } = column;
                     return (
-                        <td style={getColumnsCustomStyle(column)} className={b('item')}>
+                        <td style={createColumnsCustomStyles(column)} className={b('item')}>
                             {typeof render === 'function' ? render(record) : render}
                         </td>
                     );
@@ -37,8 +45,10 @@ const Table = <Record extends RecordRequired>({ records, columns }: TableProps<R
         ));
 
     return (
-        <table className={b()}>
-            <thead className={b('head', { title: true })}>{renderHead()}</thead>
+        <table style={{ width: tableWidth }} className={b({ bordered, hoverEffect })}>
+            <thead style={headerStyle} className={b('head', { title: true })}>
+                {renderHead()}
+            </thead>
             <tbody>{renderBody()}</tbody>
         </table>
     );
@@ -46,13 +56,13 @@ const Table = <Record extends RecordRequired>({ records, columns }: TableProps<R
 
 export const createTable = <T extends RecordRequired = any>(records: Array<RecordRequired & T>) => {
     type Record = typeof records[0];
+    type ClosureTableProps = Omit<TableProps<Record>, 'records' | 'columns'>;
 
     return (columns: Column<Record>[]) => {
-        const ClosureTable: React.FC<Omit<TableProps<Record>, 'records' | 'columns'>> = ({
-            ...rest
-        }) => {
-            return <Table<Record> columns={columns} records={records} {...rest} />;
-        };
+        const ClosureTable: React.FC<ClosureTableProps> = ({ ...rest }) => (
+            <Table<Record> columns={columns} records={records} {...rest} />
+        );
+
         return ClosureTable;
     };
 };
