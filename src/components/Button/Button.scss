@@ -1,0 +1,68 @@
+@import '../../styles/const.scss';
+
+@mixin whitShadow($color) {
+    box-shadow: 0 0 0 1px lighten($color, 20%), 0 0 0 4px lighten($color, 40%);
+}
+
+@mixin withInteractiveLigthen($background, $color) {
+    background: $background;
+    border-color: $background;
+    color: $color;
+    &:hover {
+        background: lighten($background, 8%);
+        border-color: lighten($background, 8%);
+        color: $color;
+    }
+    &:focus {
+        background: lighten($background, 8%);
+        border-color: lighten($background, 8%);
+        color: $color;
+        @include whitShadow($background);
+    }
+}
+
+.Button {
+    all: unset;
+    cursor: pointer;
+    padding: 5px 15px;
+    background-color: $white;
+    font-size: 13.5px;
+    border-radius: $bd-radius;
+    border: 1.2px solid $light;
+    color: $gray;
+    font-weight: 500;
+    transition: $transition;
+    letter-spacing: 0.45px;
+    text-align: center;
+    &:hover {
+        border-color: $primary;
+        color: $primary;
+    }
+    &:focus {
+        border-color: $primary;
+        color: $primary;
+        @include whitShadow($primary);
+    }
+
+    &_type {
+        &_primary {
+            @include withInteractiveLigthen($primary, $white);
+        }
+        &_danger {
+            @include withInteractiveLigthen($danger, $white);
+        }
+        &_link {
+            border: none;
+            color: $link;
+            &:hover {
+                color: lighten($link, 8%);
+            }
+            &:focus {
+                box-shadow: unset;
+            }
+        }
+    }
+    &_fullWidht {
+        width: 100%;
+    }
+}
