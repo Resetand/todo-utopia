@@ -8,6 +8,7 @@
         "react/button-has-type": "off",
         "react/jsx-props-no-spreading": "off",
         "@typescript-eslint/indent": "off",
-        "react/jsx-indent": "off"
+        "react/jsx-indent": "off",
+        "import/no-extraneous-dependencies": "off"
     }
 }
