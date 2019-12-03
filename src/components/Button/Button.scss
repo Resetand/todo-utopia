@@ -1,23 +1,21 @@
 @import '../../styles/const.scss';
 
-@mixin whitShadow($color) {
-    box-shadow: 0 0 0 1px lighten($color, 20%), 0 0 0 4px lighten($color, 40%);
-}
+$outline-shadow: 0 0 0 3px rgba($light, 0.4);
 
-@mixin withInteractiveLigthen($background, $color) {
+@mixin withInteractiveEffect($background, $color) {
     background: $background;
     border-color: $background;
     color: $color;
     &:hover {
-        background: lighten($background, 8%);
-        border-color: lighten($background, 8%);
+        background: darken($background, 8%);
+        border-color: darken($background, 8%);
         color: $color;
     }
     &:focus {
-        background: lighten($background, 8%);
-        border-color: lighten($background, 8%);
+        background: darken($background, 8%);
+        border-color: darken($background, 8%);
         color: $color;
-        @include whitShadow($background);
+        box-shadow: $outline-shadow;
     }
 }
 
@@ -30,10 +28,12 @@
     border-radius: $bd-radius;
     border: 1.2px solid $light;
     color: $gray;
-    font-weight: 500;
-    transition: $transition;
+    font-weight: 400;
+    transition: border-color $transition, background-color $transition, transform 0.08s,
+        color $transition;
     letter-spacing: 0.45px;
     text-align: center;
+
     &:hover {
         border-color: $primary;
         color: $primary;
@@ -41,15 +41,15 @@
     &:focus {
         border-color: $primary;
         color: $primary;
-        @include whitShadow($primary);
+        box-shadow: $outline-shadow;
     }
 
-    &_type {
+    &_theme {
         &_primary {
-            @include withInteractiveLigthen($primary, $white);
+            @include withInteractiveEffect($primary, $white);
         }
         &_danger {
-            @include withInteractiveLigthen($danger, $white);
+            @include withInteractiveEffect($danger, $white);
         }
         &_link {
             border: none;
@@ -62,7 +62,35 @@
             }
         }
     }
-    &_fullWidht {
+
+    &_clicked:not(&_fullWidth):not(&_type_link) {
+        transform: scale(0.98, 0.99);
+    }
+
+    &_fullWidth {
         width: 100%;
+    }
+}
+
+.ButtonGroup {
+    display: flex;
+    & > .Button {
+        border-radius: unset;
+
+        &:first-child {
+            border-radius: $bd-radius 0 0 $bd-radius;
+        }
+        &:last-child {
+            border-radius: 0 $bd-radius $bd-radius 0;
+        }
+
+        &:not(:first-child) {
+            margin-left: -1px;
+        }
+
+        &:hover,
+        &:focus {
+            z-index: 2;
+        }
     }
 }

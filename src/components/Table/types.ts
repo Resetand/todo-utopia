@@ -2,18 +2,22 @@ export interface RecordRequired {
     key: string;
 }
 
+type RowHandler = (key: string, event: React.MouseEvent) => void;
+
 export interface TableProps<Record> {
+    theme?: 'primary' | 'default' | 'danger' | 'clear';
     columns: Column<Record>[];
     records: Record[];
     width?: number;
-    onRowClick?: (key: string) => void;
+    onRowClick?: RowHandler;
+    onRowHover?: RowHandler;
     bordered?: boolean;
-    hoverEffect?: boolean;
     headerStyle?: React.CSSProperties;
+    fixedLayout?: boolean;
 }
 
 export interface Column<Record> {
-    title: string;
+    head?: React.ReactNode;
     render: ((record: Record) => React.ReactNode) | React.ReactNode;
     width?: number;
     align?: 'right' | 'left' | 'center';

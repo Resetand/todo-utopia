@@ -1,24 +1,36 @@
 import * as React from 'react';
 import block from 'bem-cn';
 import './Button.scss';
+import { sleep } from '../../utils/lodash';
+import { ButtonProps } from './types';
 
 const b = block('Button');
 
-interface Props extends React.HTMLProps<HTMLButtonElement> {
-    type?: 'primary' | 'link' | 'danger' | 'default';
-    htmlType?: 'button' | 'submit' | 'reset';
+const Button: React.FC<ButtonProps> = ({ theme, fullWidth, children, className, ...rest }) => {
+    const [clicked, setClicked] = React.useState(false);
 
-    fullWidth?: boolean;
-    className?: string;
-}
-
-const Button: React.FC<Props> = ({ type, fullWidth, children, className, htmlType, ...rest }) => {
-    const htmlButtonProps = {
-        ...rest,
-        type: htmlType,
-        className: b({ fullWidth, type }).mix(className),
+    const animate = async () => {
+        if (!clicked) {
+            setClicked(true);
+            await sleep(80);
+            setClicked(false);
+        }
     };
-    return <button {...htmlButtonProps}>{children}</button>;
+
+    const onClick: React.MouseEventHandler<HTMLButtonElement> = e => {
+        animate();
+        if (rest.onClick) {
+            rest.onClick(e);
+        }
+    };
+
+    const mixedClassName = b({ fullWidth, theme, clicked }).mix(className);
+
+    return (
+        <button onClick={onClick} className={mixedClassName} {...rest}>
+            {children}
+        </button>
+    );
 };
 
 export default Button;

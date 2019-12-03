@@ -10,61 +10,60 @@ const Table = <Record extends RecordRequired>({
     columns,
     width: tableWidth,
     bordered = false,
-    onRowClick = () => {},
-    hoverEffect,
-    headerStyle,
-}: TableProps<Record>) => {
-    const createColumnsCustomStyles = ({ width, align }: Column<Record>) => {
-        const style: React.CSSProperties = {
-            width,
-            textAlign: align || 'left',
-        };
-        return style;
-    };
+    onRowClick,
+    theme,
+    fixedLayout,
+}: TableProps<Record>): ReturnType<React.FC<TableProps<Record>>> => {
+    const createColumnsCSS = ({
+        width,
+        align: textAlign,
+    }: Column<Record>): React.CSSProperties => ({ width, textAlign });
 
-    const renderHead = () => {
-        return columns.map(column => (
-            <th style={createColumnsCustomStyles(column)} className={b('item', { title: true })}>
-                {column.title}
-            </th>
-        ));
-    };
+    const renderHead = () => (
+        <tr>
+            {columns.map(column => (
+                <th style={createColumnsCSS(column)} className={b('item', { title: true, theme })}>
+                    {column.head}
+                </th>
+            ))}
+        </tr>
+    );
 
     const renderBody = () =>
-        records.map(record => (
-            <tr onClick={() => onRowClick(record.key)} key={record.key}>
-                {columns.map(column => {
-                    const { render } = column;
-                    return (
-                        <td style={createColumnsCustomStyles(column)} className={b('item')}>
-                            {typeof render === 'function' ? render(record) : render}
-                        </td>
-                    );
-                })}
-            </tr>
-        ));
+        records.map(record => {
+            const onClick = (event: React.MouseEvent) => {
+                if (onRowClick) {
+                    onRowClick(record.key, event);
+                }
+            };
+
+            return (
+                <tr onClick={onClick} key={record.key}>
+                    {columns.map(column => {
+                        const { render } = column;
+                        return (
+                            <td style={createColumnsCSS(column)} className={b('item')}>
+                                {typeof render === 'function' ? render(record) : render}
+                            </td>
+                        );
+                    })}
+                </tr>
+            );
+        });
+
+    const hoverMod = Boolean(onRowClick);
+
+    const tableAttrs = {
+        className: b({ bordered, hover: hoverMod, theme, fixedLayout }),
+        style: { width: tableWidth },
+    };
 
     return (
-        <table style={{ width: tableWidth }} className={b({ bordered, hoverEffect })}>
-            <thead style={headerStyle} className={b('head', { title: true })}>
-                {renderHead()}
-            </thead>
+        <table {...tableAttrs}>
+            <thead className={b('head', { title: true, theme })}>{renderHead()}</thead>
             <tbody>{renderBody()}</tbody>
         </table>
     );
-};
-
-export const createTable = <T extends RecordRequired = any>(records: Array<RecordRequired & T>) => {
-    type Record = typeof records[0];
-    type ClosureTableProps = Omit<TableProps<Record>, 'records' | 'columns'>;
-
-    return (columns: Column<Record>[]) => {
-        const ClosureTable: React.FC<ClosureTableProps> = ({ ...rest }) => (
-            <Table<Record> columns={columns} records={records} {...rest} />
-        );
-
-        return ClosureTable;
-    };
 };
 
 export default Table;
