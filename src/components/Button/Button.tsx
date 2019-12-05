@@ -26,8 +26,9 @@ const Button: React.FC<ButtonProps> = ({ theme, fullWidth, children, className, 
 
     const mixedClassName = b({ fullWidth, theme, clicked }).mix(className);
 
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
     return (
-        <button onClick={onClick} className={mixedClassName} {...rest}>
+        <button onClick={onClick} ref={buttonRef} className={mixedClassName} {...rest}>
             {children}
         </button>
     );

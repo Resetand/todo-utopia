@@ -1,6 +1,7 @@
 @import '../../styles/const.scss';
 
 $outline-shadow: 0 0 0 3px rgba($light, 0.4);
+$bd-radius: 4px;
 
 @mixin withInteractiveEffect($background, $color) {
     background: $background;

@@ -12,7 +12,8 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "noEmit": true,
-        "jsx": "react"
+        "jsx": "react",
+        "downlevelIteration": true
     },
     "exclude": ["node_modules"],
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]

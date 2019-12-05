@@ -1,9 +1,11 @@
 import * as React from 'react';
 import './Table.scss';
 import Table from './Table';
-import { RecordRequired, TableProps, Column } from './types';
+import { RecordRequiredFields, TableProps, Column } from './types';
 
-const createTable = <T extends RecordRequired = any>(records: Array<RecordRequired & T>) => {
+const createTable = <T extends RecordRequiredFields = any>(
+    records: Array<RecordRequiredFields & T>,
+) => {
     type Record = typeof records[0];
     type ClosureTableProps = Omit<TableProps<Record>, 'records' | 'columns'>;
 

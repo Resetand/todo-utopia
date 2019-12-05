@@ -1,11 +1,11 @@
-export interface RecordRequired {
+export interface RecordRequiredFields {
     key: string;
 }
 
 type RowHandler = (key: string, event: React.MouseEvent) => void;
 
 export interface TableProps<Record> {
-    theme?: 'primary' | 'default' | 'danger' | 'clear';
+    theme?: 'primary' | 'danger' | 'default' | 'clear';
     columns: Column<Record>[];
     records: Record[];
     width?: number;

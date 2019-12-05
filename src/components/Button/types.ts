@@ -1,5 +1,5 @@
 export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
-    theme?: 'primary' | 'link' | 'danger' | 'default';
+    theme?: 'primary' | 'danger' | 'default' | 'link';
     fullWidth?: boolean;
     className?: string;
 }

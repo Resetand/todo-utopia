@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import createTable from './CreateTable';
+import Checkbox from '../Checkbox';
 
 interface Todo {
     title: string;
@@ -15,7 +16,7 @@ interface Todo {
     const records = todos.splice(0, 40).map(todo => ({ ...todo, key: todo.id }));
     const TodoTable = createTable(records)([
         {
-            render: record => <input type="checkbox" checked={record.completed} />,
+            render: record => <Checkbox checked={record.completed} />,
             width: 5,
             head: 'completed',
         },
@@ -35,6 +36,6 @@ interface Todo {
         .add('Todo', () => <TodoTable theme="primary" />)
         .add('Todo fixed width', () => <TodoTable theme="primary" width={500} />)
         .add('Todo Bordered', () => <TodoTable theme="primary" bordered />)
-        .add('Todo row click handling', () => <TodoTable theme="primary" onRowHover={alert} />)
+        .add('Todo row click handling', () => <TodoTable theme="primary" onRowClick={alert} />)
         .add('Default table', () => <DataTable />);
 })();

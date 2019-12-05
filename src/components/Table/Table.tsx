@@ -1,11 +1,11 @@
 import block from 'bem-cn';
 import * as React from 'react';
 import './Table.scss';
-import { RecordRequired, TableProps, Column } from './types';
+import { RecordRequiredFields, TableProps, Column } from './types';
 
 const b = block('Table');
 
-const Table = <Record extends RecordRequired>({
+const Table = <Record extends RecordRequiredFields>({
     records,
     columns,
     width: tableWidth,
@@ -51,10 +51,10 @@ const Table = <Record extends RecordRequired>({
             );
         });
 
-    const hoverMod = Boolean(onRowClick);
+    const needHoverBemMod = Boolean(onRowClick);
 
     const tableAttrs = {
-        className: b({ bordered, hover: hoverMod, theme, fixedLayout }),
+        className: b({ bordered, hover: needHoverBemMod, theme, fixedLayout }),
         style: { width: tableWidth },
     };
 

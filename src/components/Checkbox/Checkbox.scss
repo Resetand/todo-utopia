@@ -1,0 +1,91 @@
+@import '../../styles/const.scss';
+
+$bd-radius: 2.5px;
+$checkbox-arrow-url: "data:image/svg+xml,%3C%3Fxml version='1.0'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' width='512px' height='512px' viewBox='0 0 442.533 442.533' style='enable-background:new 0 0 442.533 442.533;' xml:space='preserve'%3E%3Cg%3E%3Cg%3E%3Cpath d='M434.539,98.499l-38.828-38.828c-5.324-5.328-11.799-7.993-19.41-7.993c-7.618,0-14.093,2.665-19.417,7.993L169.59,247.248 l-83.939-84.225c-5.33-5.33-11.801-7.992-19.412-7.992c-7.616,0-14.087,2.662-19.417,7.992L7.994,201.852 C2.664,207.181,0,213.654,0,221.269c0,7.609,2.664,14.088,7.994,19.416l103.351,103.349l38.831,38.828 c5.327,5.332,11.8,7.994,19.414,7.994c7.611,0,14.084-2.669,19.414-7.994l38.83-38.828L434.539,137.33 c5.325-5.33,7.994-11.802,7.994-19.417C442.537,110.302,439.864,103.829,434.539,98.499z' data-original='%23000000' class='active-path' data-old_color='%23000000' fill='%23FFFEFE'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A";
+$size: 0.85em;
+
+.Checkbox {
+    --theme-color: #1890ff;
+
+    display: inline-block;
+    user-select: none;
+    margin-left: 1.2em;
+    position: relative;
+    &__box {
+        display: inline-block;
+        width: $size;
+        height: $size;
+        border: {
+            radius: $bd-radius;
+            width: 1px;
+            style: solid;
+            color: $primary;
+        }
+        position: absolute;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            border-radius: $bd-radius;
+            transition: 0.2s;
+            opacity: 0;
+            transform: scale(1.5);
+            visibility: hidden;
+            box-shadow: 0 0 0 3px $primary;
+        }
+        margin-left: -1.2em;
+        top: 50%;
+        transform: translateY(-50%);
+        &_theme {
+            &_danger {
+                border-color: $danger;
+                &::before {
+                    box-shadow: 0 0 0 3px $danger;
+                }
+            }
+        }
+    }
+
+    &__input {
+        appearance: none;
+        position: absolute;
+    }
+    &__input:not([disabled]) ~ &__box,
+    &__label-inner {
+        cursor: pointer;
+    }
+
+    &__input:checked ~ &__box {
+        background: $primary url($checkbox-arrow-url) no-repeat center center / 70%;
+        &::before {
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 0 0 $primary;
+        }
+
+        &_theme {
+            &_danger {
+                background-color: $danger;
+                &::before {
+                    box-shadow: 0 0 0 0 $danger;
+                }
+            }
+        }
+    }
+
+    &__input:focus ~ &__box {
+        box-shadow: 0 0 0 3px rgba($light, 0.6);
+    }
+
+    &__input:disabled ~ &__box {
+        border-color: $light;
+        background-color: $light;
+        &::before {
+            display: none;
+        }
+    }
+}
